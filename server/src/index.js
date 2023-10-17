@@ -14,14 +14,10 @@ mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log("mongodb connected...");
-    // User.findAll().then((users) => {
-    //   console.log(users);
-    // });
-    User.findAll()
-      .then((users) => console.log(users))
-      .catch((e) => console.error(e));
   })
   .catch((e) => console.log(e));
+
+app.use("/api/users", require("./routes/user"));
 
 const server = app.listen(PORT, function () {
   const host = server.address().address;
