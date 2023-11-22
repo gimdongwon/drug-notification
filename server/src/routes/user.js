@@ -1,39 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const { User } = require("../models/user");
+bodyParser = require("body-parser").json();
 
+// user 조회
 router.get("/findAll", async (req, res) => {
-  //   User.findAll()
-  //     .then((users) => console.log(users))
-  //     .catch((e) => console.error(e));
-  //   User.find((err, users) => {
-  //     if (err) {
-  //       console.error(err);
-  //     } else {
-  //       users.forEach(function (element) {
-  //         console.log(element.name);
-  //       });
-  //     }
-  //   });
-  User.find().then((users) => {
+  try {
+    const users = await User.find();
     return res.status(200).json({
       success: true,
       users,
     });
-  });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
-// router.post("/join", (req, res) => {
-//   const { name, age, gender, _id } = req;
-//   const obj = {
-//     name,
-//     age,
-//     gender,
-//     _id,
-//   };
-//   User.create(obj)
-//     .then((users) => console.log(users))
-//     .catch((e) => console.error(e));
-// });
+// user 회원가입
+router.post("/signup", bodyParser, async (req, res) => {
+  try {
+    const user = new User(req.body);
+    await user.save();
+    return res.status(200).json({
+      success: true,
+      message: req.body.name + "이 추가되었습니다",
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 module.exports = router;
